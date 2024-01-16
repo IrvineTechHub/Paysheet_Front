@@ -1,0 +1,19 @@
+
+  h2 {
+    color: #333;
+    text-align: center;
+  }
+  
+  input {
+    margin-top: 20px;
+  }
+  
+  .preview-container {
+    margin-top: 20px;
+  }
+  
+  .preview-container img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }  
