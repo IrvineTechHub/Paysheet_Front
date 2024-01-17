@@ -9,10 +9,13 @@ function Sidebar() {
       </div>
       <ul>
         <li>
-          <Link to="/Paysheet">Payroll Overview</Link>
+          <Link to="/UploadImage">Upload Image</Link>
         </li>
         <li>
-          <Link to="/UploadImage">Upload Image</Link>
+          <Link to="/ModifyInfo">Modify Information</Link>
+        </li>
+        <li>
+          <Link to="/Paysheet">Payroll Overview</Link>
         </li>
       </ul>
     </div>
