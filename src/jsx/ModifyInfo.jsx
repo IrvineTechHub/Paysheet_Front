@@ -8,15 +8,15 @@ const ModifyInfo = () => {
 
   const initialData = [
     { date: '6/23/2023', day: 'Thursday', timeIn: '09:00', timeOut: '11:00', timeIn2: '13:00', timeOut2: '18:00' },
-    { date: '7/23/2023', day: 'Friday', timeIn: '10:00', timeOut: '11:00', timeIn2: '14:00', timeOut2: '19:00' },
-    { date: '8/23/2023', day: 'Saturday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+    { date: '6/24/2023', day: 'Friday', timeIn: '10:00', timeOut: '11:00', timeIn2: '14:00', timeOut2: '19:00' },
+    { date: '6/25/2023', day: 'Saturday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
   ];
 
   const [data, setData] = useState(initialData);
   const [isEditing, setIsEditing] = useState(false);
   const [editableData, setEditableData] = useState(null);
-  const [ratePerHour, setRatePerHour] = useState(''); // State for rate per hour
-  const [overtimePay, setOvertimePay] = useState(''); // State for overtime pay
+  const [ratePerHour, setRatePerHour] = useState(''); // rate per hour
+  const [overtimePay, setOvertimePay] = useState(''); // overtime pay
 
   const handleEditTable = (item) => {
     setIsEditing(true);
