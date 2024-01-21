@@ -5,7 +5,7 @@ function Sidebar() {
   return (
     <div className="sidebar">
       <div className="sidebar-title">
-        <Link to="/UploadImage">
+        <Link to="/Paysheet">
           <img src="/assets/title.png" alt="Title" />
         </Link>
       </div>

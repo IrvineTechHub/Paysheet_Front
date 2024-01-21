@@ -13,9 +13,10 @@ function App() {
         <Sidebar />
         <div className="content">
           <Routes>
-            <Route path="/paysheet" element={<Paysheet />} />
+            <Route path="/" element={<Paysheet />} />
             <Route path="/modifyinfo" element={<ModifyInfo />} />
             <Route path="/uploadimage" element={<UploadImage />} />
+            <Route path="/paysheet" element={<Paysheet />} />
           </Routes>
         </div>
       </div>

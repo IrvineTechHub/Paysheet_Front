@@ -6,6 +6,7 @@ function Paysheet() {
   const paysheetData = [
     { month: 6, employee: 'Somi', totalHours: 60, salary: 5000 },
     { month: 6, employee: 'Jiwon', totalHours: 60, salary: 6000 },
+    { month: 7, employee: 'Jiwon', totalHours: 60, salary: 6000 },
     { month: 7, employee: 'Somi', totalHours: 55, salary: 5500 },
     { month: 8, employee: 'Somi', totalHours: 55, salary: 5500 },
     // 데이터 추가해서 테스트
@@ -21,10 +22,13 @@ function Paysheet() {
     return acc;
   }, {});
 
+  // Sort the keys in reverse order (latest to earliest)
+  const sortedMonths = Object.keys(groupedData).sort((a, b) => b - a);
+
   return (
     <div>
       <h2>Payroll Overview</h2>
-      {Object.keys(groupedData).map((month) => (
+      {sortedMonths.map((month) => (
         <div key={month}>
           <h3>Month {month}</h3>
           <table>

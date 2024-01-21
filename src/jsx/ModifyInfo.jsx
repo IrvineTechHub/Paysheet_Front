@@ -10,47 +10,42 @@ const ModifyInfo = () => {
     { date: '6/23/2023', day: 'Thursday', timeIn: '09:00', timeOut: '11:00', timeIn2: '13:00', timeOut2: '18:00' },
     { date: '6/24/2023', day: 'Friday', timeIn: '10:00', timeOut: '11:00', timeIn2: '14:00', timeOut2: '19:00' },
     { date: '6/25/2023', day: 'Saturday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+    { date: '6/26/2023', day: 'Sunday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+    { date: '6/27/2023', day: 'Monday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+    { date: '6/28/2023', day: 'Tuesday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+    { date: '6/29/2023', day: 'Wednesday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
   ];
 
   const [data, setData] = useState(initialData);
   const [isEditing, setIsEditing] = useState(false);
-  const [editableData, setEditableData] = useState(null);
   const [ratePerHour, setRatePerHour] = useState(''); // rate per hour
   const [overtimePay, setOvertimePay] = useState(''); // overtime pay
+  const [name, setName] = useState('Jiwon'); // name
 
-  const handleEditTable = (item) => {
+  const handleModify = () => { // 수정 버튼 시 수정 모드 전환
     setIsEditing(true);
-    setEditableData({ ...item });
   };
 
-  const handleSave = () => {
-    const updatedData = data.map((item) =>
-      item.date === editableData.date ? { ...item, day: editableData.day } : item
-    );
-    setData(updatedData);
-    setEditableData(null);
+  const handleSaveAll = () => { // 수정 내용 일괄 저장
     setIsEditing(false);
+    // You can perform additional logic to save the name if needed
   };
 
-  const handleCancel = () => {
-    setEditableData(null);
+  const handleCancelAll = () => { // 수정 내용 일괄 취소
     setIsEditing(false);
+    // If needed, you can revert the name back to the initial state
   };
 
-  const handleSaveAll = () => {
-    const updatedData = data.map((item) => ({ ...item, day: editableData.day }));
-    setData(updatedData);
-    setEditableData(null);
-    setIsEditing(false);
+  const handleRatePerHourChange = (e) => { // rate per hour 저장
+    setRatePerHour(e.target.value);
   };
 
-  const handleCellEdit = (field, value) => {
-    if (isEditing) {
-      setEditableData((prevData) => ({
-        ...prevData,
-        [field]: value,
-      }));
-    }
+  const handleOvertimePayChange = (e) => { // overtime pay 저장
+    setOvertimePay(e.target.value);
+  };
+
+  const handleNameChange = (e) => { // name 저장
+    setName(e.target.value);
   };
 
   return (
@@ -60,7 +55,7 @@ const ModifyInfo = () => {
         {selectedImage && (
           <div className="image-preview">
             <h3>Uploaded Image :</h3>
-            <img src={selectedImage} alt="Uploaded Image" style={{ maxWidth: '100%' }} />
+            <img src={selectedImage} alt="Uploaded Image" style={{ maxWidth: '95%' }} />
           </div>
         )}
         {!selectedImage && (
@@ -70,7 +65,13 @@ const ModifyInfo = () => {
         )}
         {selectedImage && (
           <div className="info-section">
-            <h3>Jiwon</h3>
+            <h3>
+              {isEditing ? (
+                <input type="text" value={name} onChange={handleNameChange} />
+              ) : (
+                name
+              )}
+            </h3>
             <table>
               <thead>
                 <tr>
@@ -83,54 +84,38 @@ const ModifyInfo = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item) => (
-                  <tr key={item.date} onClick={() => handleEditTable(item)}>
-                    <td>{item.date}</td>
-                    <td>{item.day}</td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={editableData?.timeIn || ''}
-                          onChange={(e) => handleCellEdit('timeIn', e.target.value)}
-                        />
-                      ) : (
-                        item.timeIn
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={editableData?.timeOut || ''}
-                          onChange={(e) => handleCellEdit('timeOut', e.target.value)}
-                        />
-                      ) : (
-                        item.timeOut
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={editableData?.timeIn2 || ''}
-                          onChange={(e) => handleCellEdit('timeIn2', e.target.value)}
-                        />
-                      ) : (
-                        item.timeIn2
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={editableData?.timeOut2 || ''}
-                          onChange={(e) => handleCellEdit('timeOut2', e.target.value)}
-                        />
-                      ) : (
-                        item.timeOut2
-                      )}
-                    </td>
+                {data.map((item, index) => (
+                  <tr key={index}>
+                    <td>{isEditing ? <input type="text" value={item.date} onChange={(e) => setData(prevData => {
+                      const newData = [...prevData];
+                      newData[index].date = e.target.value;
+                      return newData;
+                    })} style={{ width: '90px' }} /> : item.date}</td>
+                    <td>{isEditing ? <input type="text" value={item.day} onChange={(e) => setData(prevData => {
+                      const newData = [...prevData];
+                      newData[index].day = e.target.value;
+                      return newData;
+                    })} style={{ width: '80px' }} /> : item.day}</td>
+                    <td>{isEditing ? <input type="text" value={item.timeIn} onChange={(e) => setData(prevData => {
+                      const newData = [...prevData];
+                      newData[index].timeIn = e.target.value;
+                      return newData;
+                    })} /> : item.timeIn}</td>
+                    <td>{isEditing ? <input type="text" value={item.timeOut} onChange={(e) => setData(prevData => {
+                      const newData = [...prevData];
+                      newData[index].timeOut = e.target.value;
+                      return newData;
+                    })} /> : item.timeOut}</td>
+                    <td>{isEditing ? <input type="text" value={item.timeIn2} onChange={(e) => setData(prevData => {
+                      const newData = [...prevData];
+                      newData[index].timeIn2 = e.target.value;
+                      return newData;
+                    })} /> : item.timeIn2}</td>
+                    <td>{isEditing ? <input type="text" value={item.timeOut2} onChange={(e) => setData(prevData => {
+                      const newData = [...prevData];
+                      newData[index].timeOut2 = e.target.value;
+                      return newData;
+                    })} /> : item.timeOut2}</td>
                   </tr>
                 ))}
               </tbody>
@@ -140,7 +125,7 @@ const ModifyInfo = () => {
                 <button style={{ fontSize: '0.9rem', padding: '4px 8px', marginRight: '8px' }} onClick={handleSaveAll}>
                   Save All
                 </button>
-                <button style={{ fontSize: '0.9rem', padding: '4px 8px' }} onClick={handleCancel}>
+                <button style={{ fontSize: '0.9rem', padding: '4px 8px' }} onClick={handleCancelAll}>
                   Cancel All
                 </button>
               </div>
@@ -148,6 +133,13 @@ const ModifyInfo = () => {
           </div>
         )}
       </div>
+      {selectedImage && !isEditing && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px' }}>
+          <button style={{ fontSize: '1.0rem', padding: '5px 10px' }} onClick={handleModify}>
+            Modify
+          </button>
+        </div>
+      )}
       {selectedImage && (
         <div className="user-input-section" style={{ display: 'flex', justifyContent: 'flex-end', margin: '16px 0' }}>
           <div style={{ marginRight: '16px' }}>
@@ -156,7 +148,7 @@ const ModifyInfo = () => {
               <input
                 type="text"
                 value={ratePerHour}
-                onChange={(e) => setRatePerHour(e.target.value)}
+                onChange={handleRatePerHourChange}
               />
             </label>
           </div>
@@ -166,7 +158,7 @@ const ModifyInfo = () => {
               <input
                 type="text"
                 value={overtimePay}
-                onChange={(e) => setOvertimePay(e.target.value)}
+                onChange={handleOvertimePayChange}
               />
             </label>
           </div>
