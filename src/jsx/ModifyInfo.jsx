@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import '../App.css';
 
 const ModifyInfo = () => {
@@ -21,6 +21,7 @@ const ModifyInfo = () => {
   const [ratePerHour, setRatePerHour] = useState(''); // rate per hour
   const [overtimePay, setOvertimePay] = useState(''); // overtime pay
   const [name, setName] = useState('Jiwon'); // name
+  const navigate = useNavigate();
 
   const handleModify = () => { // 수정 버튼 시 수정 모드 전환
     setIsEditing(true);
@@ -32,8 +33,35 @@ const ModifyInfo = () => {
     return timeRegex.test(time);
   };
 
+  const isDateFormatValid = (date) => {
+    // 간단한 날짜 형식 체크 함수 (MM/DD/YYYY)
+    const dateRegex = /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d{4}$/;
+    return dateRegex.test(date);
+  };
+
   const handleSaveAll = () => { // 수정 내용 일괄 저장
-    // 시간 형식이 맞는지 확인하고 저장
+    // 이름이 문자인지 확인
+    const isNameValid = /^[a-zA-Z]+$/.test(name);
+    if (!isNameValid) {
+      alert('Invalid name format. Please use only letters.');
+      return;
+    }
+
+    // date 형식이 맞는지 확인하고 저장
+    const isDateFormatError = data.some((item) => !isDateFormatValid(item.date));
+    if (isDateFormatError) {
+      alert('Invalid date format. Please use Month/Date/Year format.');
+      return;
+    }
+
+    // day가 문자인지 확인
+    const isDayValid = data.every((item) => /^[a-zA-Z]+$/.test(item.day));
+    if (!isDayValid) {
+      alert('Invalid day format. Please use only letters for the day.');
+      return;
+    }
+
+    // timeIn, timeOut 형식이 맞는지 확인하고 저장
     const isTimeFormatError = data.some((item) => !isTimeFormatValid(item.timeIn) || !isTimeFormatValid(item.timeOut) || !isTimeFormatValid(item.timeIn2) || !isTimeFormatValid(item.timeOut2));
     if (isTimeFormatError) {
       alert('Invalid time format. Please use HH:mm format.');
@@ -56,6 +84,16 @@ const ModifyInfo = () => {
 
   const handleNameChange = (e) => { // name 저장
     setName(e.target.value);
+  };
+
+  const handleSubmit = () => { // submit 버튼 눌렀을 때 rate per hour, overtime pay 저장
+    // ratePerHour과 overtimePay가 숫자인지 확인
+    if (!/^\d+$/.test(ratePerHour) || !/^\d+$/.test(overtimePay)) {
+      alert('Rate per Hour and Overtime Pay must be numeric values.');
+      return;
+    }
+
+    navigate('/Paysheet');
   };
 
   return (
@@ -176,9 +214,12 @@ const ModifyInfo = () => {
       )}
       {selectedImage && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px' }}>
-          <Link to="/Paysheet">
-            <button style={{ fontSize: '1.0rem', padding: '5px 10px' }}>Submit</button>
-          </Link>
+          <button
+            style={{ fontSize: '1.0rem', padding: '5px 10px' }}
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
         </div>
       )}
     </div>
