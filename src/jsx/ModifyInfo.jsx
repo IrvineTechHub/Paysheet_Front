@@ -26,14 +26,24 @@ const ModifyInfo = () => {
     setIsEditing(true);
   };
 
+  const isTimeFormatValid = (time) => {
+    // 간단한 시간 형식 체크 함수
+    const timeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+    return timeRegex.test(time);
+  };
+
   const handleSaveAll = () => { // 수정 내용 일괄 저장
+    // 시간 형식이 맞는지 확인하고 저장
+    const isTimeFormatError = data.some((item) => !isTimeFormatValid(item.timeIn) || !isTimeFormatValid(item.timeOut) || !isTimeFormatValid(item.timeIn2) || !isTimeFormatValid(item.timeOut2));
+    if (isTimeFormatError) {
+      alert('Invalid time format. Please use HH:mm format.');
+      return;
+    }
     setIsEditing(false);
-    // You can perform additional logic to save the name if needed
   };
 
   const handleCancelAll = () => { // 수정 내용 일괄 취소
     setIsEditing(false);
-    // If needed, you can revert the name back to the initial state
   };
 
   const handleRatePerHourChange = (e) => { // rate per hour 저장
