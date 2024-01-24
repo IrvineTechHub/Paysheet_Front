@@ -22,14 +22,16 @@ function UploadImage() {
 
   return (
     <div>
-      <h2>Upload Image</h2>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
-      {selectedImage && (
-        <div className="preview-container">
-          <h3>미리보기:</h3>
-          <img src={selectedImage} alt="업로드된 미리보기" />
-        </div>
-      )}
+      <h1>Upload Image</h1>
+      <div className="upload-container">
+        <input type="file" accept="image/*" onChange={handleImageChange} />
+        {selectedImage && (
+          <div className="preview-container">
+            <h3>미리보기:</h3>
+            <img src={selectedImage} alt="업로드된 미리보기" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

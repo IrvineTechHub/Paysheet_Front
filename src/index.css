@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: "RobotoSlab-VariableFont_wght";
+  font-weight: normal;
+  src: url("./fonts/RobotoSlab-VariableFont_wght.ttf") format("truetype");
+}
+
+body {
+  font-family: "RobotoSlab-VariableFont_wght";
+}

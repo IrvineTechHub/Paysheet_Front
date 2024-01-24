@@ -27,30 +27,32 @@ function Paysheet() {
 
   return (
     <div>
-      <h2>Payroll Overview</h2>
-      {sortedMonths.map((month) => (
-        <div key={month}>
-          <h3>Month {month}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Employee</th>
-                <th>Total Hours</th>
-                <th>Salary</th>
-              </tr>
-            </thead>
-            <tbody>
-              {groupedData[month].map((item, index) => (
-                <tr key={index}>
-                  <td>{item.employee}</td>
-                  <td>{item.totalHours}</td>
-                  <td>{item.salary}</td>
+      <h1>Payroll Overview</h1>
+      <div>
+        {sortedMonths.map((month) => (
+          <div key={month}>
+            <h3>Month {month}</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Total Hours</th>
+                  <th>Salary</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+              </thead>
+              <tbody>
+                {groupedData[month].map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.employee}</td>
+                    <td>{item.totalHours}</td>
+                    <td className="pink-cell">{item.salary}</td> {/* 클래스 추가 */}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

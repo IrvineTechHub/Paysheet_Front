@@ -98,7 +98,7 @@ const ModifyInfo = () => {
 
   return (
     <div>
-      <h2>Modify Information</h2>
+      <h1>Modify Information</h1>
       <div className="modify-info-container">
         {selectedImage && (
           <div className="image-preview">
