@@ -1,27 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import '../App.css';
 
 const ModifyInfo = () => {
   const location = useLocation();
-  const selectedImage = location.state && location.state.selectedImage;
+  //const selectedImage = location.state && location.state.selectedImage;
+  const ocrData = location.state?.ocrData;
+  const selectedImage = location.state?.selectedImage;
 
-  const initialData = [
-    { date: '6/23/2023', day: 'Thursday', timeIn: '09:00', timeOut: '11:00', timeIn2: '13:00', timeOut2: '18:00' },
-    { date: '6/24/2023', day: 'Friday', timeIn: '10:00', timeOut: '11:00', timeIn2: '14:00', timeOut2: '19:00' },
-    { date: '6/25/2023', day: 'Saturday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
-    { date: '6/26/2023', day: 'Sunday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
-    { date: '6/27/2023', day: 'Monday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
-    { date: '6/28/2023', day: 'Tuesday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
-    { date: '6/29/2023', day: 'Wednesday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
-  ];
+  // const initialData = [
+  //   { date: '6/23/2023', day: 'Thursday', timeIn: '09:00', timeOut: '11:00', timeIn2: '13:00', timeOut2: '18:00' },
+  //   { date: '6/24/2023', day: 'Friday', timeIn: '10:00', timeOut: '11:00', timeIn2: '14:00', timeOut2: '19:00' },
+  //   { date: '6/25/2023', day: 'Saturday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+  //   { date: '6/26/2023', day: 'Sunday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+  //   { date: '6/27/2023', day: 'Monday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+  //   { date: '6/28/2023', day: 'Tuesday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+  //   { date: '6/29/2023', day: 'Wednesday', timeIn: '10:30', timeOut: '11:45', timeIn2: '13:30', timeOut2: '19:00' },
+  // ];
 
-  const [data, setData] = useState(initialData);
+  console.log('왔냐?', ocrData);
+
   const [isEditing, setIsEditing] = useState(false);
   const [ratePerHour, setRatePerHour] = useState(''); // rate per hour
   const [overtimePay, setOvertimePay] = useState(''); // overtime pay
   const [name, setName] = useState('Jiwon'); // name
+  const [weekStart, setWeekStart] = useState(''); 
   const navigate = useNavigate();
+  const [data, setData] = useState([])
+
+  const convertOcrDataToInitialData = (ocrData) => {
+    // Extract the name and week starting date
+    const employeeName = ocrData.employee_name;
+    const weekStart = ocrData.weekStart;
+  
+    // Map the ocrData to the initialData format
+    const initialData = ocrData.data.map((entry) => ({
+      date: entry[0],
+      day: entry[1],
+      timeIn: entry[2],
+      timeOut: entry[3],
+      timeIn2: entry[4] || '', // Assuming these might be optional
+      timeOut2: entry[5] || '',
+    }));
+  
+    return { initialData, employeeName, weekStart };
+  };
+
+  useEffect(() => {
+    if (ocrData) {
+      const { initialData, employeeName, weekStartDay } = convertOcrDataToInitialData(ocrData);
+      setData(initialData);
+      setName(employeeName);
+      setWeekStart(weekStartDay);
+    }
+  }, [ocrData]); // Depend on ocrData so this effect only runs when ocrData changes
+  
+  // const { initialData, employeeName, weekStartDay } = convertOcrDataToInitialData(ocrData);
+  // const [data, setData] = useState(initialData);
+  //setName(employeeName);
+  //setWeekStart(weekStartDay);
+  //console.log("됐나?", initialData);
 
   const handleModify = () => { // 수정 버튼 시 수정 모드 전환
     setIsEditing(true);
@@ -86,15 +124,43 @@ const ModifyInfo = () => {
     setName(e.target.value);
   };
 
-  const handleSubmit = () => { // submit 버튼 눌렀을 때 rate per hour, overtime pay 저장
+  const handleSubmit = async () => {
     // ratePerHour과 overtimePay가 숫자인지 확인
     if (!/^\d+$/.test(ratePerHour) || !/^\d+$/.test(overtimePay)) {
       alert('Rate per Hour and Overtime Pay must be numeric values.');
       return;
     }
-
-    navigate('/Paysheet');
+  
+    try {
+      const response = await fetch('http://127.0.0.1:5000/modify/timesheet-edit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          ratePerHour: ratePerHour,
+          overtimePay: overtimePay,
+          data: data // 이 부분에 서버로 보낼 데이터를 포함시킵니다.
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const result = await response.json();
+      console.log("Server response:", result);
+      
+      // 성공 메시지 또는 다른 액션을 여기에 추가할 수 있습니다.
+      navigate('/Paysheet'); // 혹은 다른 페이지로 리다이렉트
+  
+    } catch (error) {
+      console.error("Failed to submit data:", error);
+      // 실패 메시지 또는 오류 처리를 여기에 추가할 수 있습니다.
+    }
   };
+  
 
   return (
     <div>
