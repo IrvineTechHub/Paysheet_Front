@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../css/UploadImage.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../css/UploadImage.css";
 
 function UploadImage() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -22,21 +22,21 @@ function UploadImage() {
 
   const uploadFile = async () => {
     if (!img_file) {
-      console.error('이미지를 선택하세요.');
+      console.error("이미지를 선택하세요.");
       return;
     }
 
     const formData = new FormData();
-    formData.append('img_file', img_file);
-  
+    formData.append("img_file", img_file);
+
     try {
-      const res = await fetch('http://127.0.0.1:5000/upload/upload_img', {
-        method: 'POST',
-        body: formData
+      const res = await fetch("http://127.0.0.1:5000/upload/upload_img", {
+        method: "POST",
+        body: formData,
       });
-     
+
       const data = await res.json();
-      console.log('Response Data:', data)
+      console.log("Response Data:", data);
 
       // Check if the upload was successful
       if (res.ok) {
@@ -45,9 +45,11 @@ function UploadImage() {
         console.error(data.error); // Log any error message
       }
       // Navigate to the 'modifyinfo' route with extracted text
-      navigate('/modifyinfo', { state: { ocrData: data, selectedImage: selectedImage} });
+      navigate("/modifyinfo", {
+        state: { ocrData: data, selectedImage: selectedImage },
+      });
     } catch (error) {
-      console.error('Error sending file:', error);
+      console.error("Error sending file:", error);
     }
   };
 

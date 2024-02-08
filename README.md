@@ -68,3 +68,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+insert into pay (date, employee_id, total_hour, total_pay) values ('2023-02', 'HR-EMP-00003', 234, 1234);
+insert into pay (date, employee_id, total_hour, total_pay) values ('2023-04', 'HR-EMP-00002', 234, 1234);
+insert into pay (date, employee_id, total_hour, total_pay) values ('2001-10', 'HR-EMP-00001' 234, 1234);
+insert into pay (date, employee_id, total_hour, total_pay) values ('2023-12', 'HR-EMP-00002', 234, 1234);
+insert into pay (date, employee_id, total_hour, total_pay) values ('2026-01', 'HR-EMP-00003' 234, 1234);
